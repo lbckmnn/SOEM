@@ -429,6 +429,30 @@ struct ecx_context
    /** userdata, promotes application configuration esp. in EC_VER2 with multiple 
     * ec_context instances. Note: userdata memory is managed by application, not SOEM */
    void           *userdata;
+    //Note: new fields must also be added to ecx_contex_memory_holder, handled in
+    // ecx_initialize_context and in initialization of ecx_context in ethercatmain.c
+};
+
+
+/**
+ * structure which contains everything that is needed to create a ctx object without further memory.
+ */
+struct ecx_context_memory_holder {
+    ecx_portt port;
+    ec_slavet slaves[EC_MAXSLAVE];
+    int slavecount;
+    ec_groupt groups[EC_MAXGROUP];
+    uint8_t esibuf[EC_MAXEEPBUF];
+    uint32_t esimap[EC_MAXEEPBITMAP];
+    ec_eringt elist;
+    ec_idxstackT idxstack;
+    boolean ecatError;
+    int64_t dcTime;
+    ec_SMcommtypet smCommtype[EC_MAX_MAPT];
+    ec_PDOassignt pdoAssign[EC_MAX_MAPT];
+    ec_PDOdesct pdoDesc[EC_MAX_MAPT];
+    ec_eepromSMt eepSm;
+    ec_eepromFMMUt eepFmmu;
 };
 
 #ifdef EC_VER1
@@ -523,6 +547,7 @@ int ecx_send_processdata(ecx_contextt *context);
 int ecx_send_overlap_processdata(ecx_contextt *context);
 int ecx_receive_processdata(ecx_contextt *context, int timeout);
 int ecx_send_processdata_group(ecx_contextt *context, uint8 group);
+void ecx_initialize_context(ecx_contextt* ctx, struct ecx_context_memory_holder* memory);
 
 #ifdef __cplusplus
 }

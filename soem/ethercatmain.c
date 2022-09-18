@@ -2399,4 +2399,30 @@ int ec_receive_processdata(int timeout)
 {
    return ec_receive_processdata_group(0, timeout);
 }
+
+void ecx_initialize_context(ecx_contextt *ctx, struct ecx_context_memory_holder *memory) {
+    ctx->port = &(memory->port);
+    ctx->slavelist = &(memory->slaves[0]);
+    ctx->slavecount = &(memory->slavecount);
+    ctx->maxslave = sizeof(memory->slaves) / sizeof(ec_slavet);
+    ctx->grouplist = &(memory->groups[0]);
+    ctx->maxgroup = sizeof(memory->groups) / sizeof(ec_groupt);
+    ctx->esibuf = &(memory->esibuf[0]);
+    ctx->esimap = &(memory->esimap[0]);
+    ctx->esislave = 0;
+    ctx->elist = &(memory->elist);
+    ctx->idxstack = &(memory->idxstack);
+    ctx->ecaterror = &(memory->ecatError);
+    ctx->DCtime = &(memory->dcTime);
+    ctx->SMcommtype = &(memory->smCommtype[0]);
+    ctx->PDOassign = &(memory->pdoAssign[0]);
+    ctx->PDOdesc = &(memory->pdoDesc[0]);
+    ctx->eepSM = &(memory->eepSm);
+    ctx->eepFMMU = &(memory->eepFmmu);
+    ctx->FOEhook = NULL;
+    ctx->EOEhook = NULL;
+    ctx->manualstatechange = 0;
+    ctx->userdata = NULL;
+}
+
 #endif
